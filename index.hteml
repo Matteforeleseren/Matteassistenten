@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="no">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matteassistenten – Kunnskap vokser når den deles</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --lysegrønn: #6BBF59;
+    --mørkegrønn: #1E5F2E;
+    --tekst: #1a1a1a;
+    --muted: #6b7280;
+    --bg: #fafaf7;
+    --border: #e8e8e3;
+    --mørk-bg: #0f1720;
+  }
+
+  html, body {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--tekst);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ---------- Toppmeny ---------- */
+  header {
+    position: sticky;
+    top: 0;
+    background: rgba(250, 250, 247, 0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
+  }
+
+  .nav {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .logo {
+    font-family: Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--mørkegrønn);
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .nav-lenker {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-lenker a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--tekst);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-lenker a:hover { color: var(--mørkegrønn); }
+  .nav-lenker a.cta { color: var(--mørkegrønn); font-weight: 600; }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 72px 24px 56px;
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 64px;
+    align-items: center;
+  }
+
+  .hero-tekst .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mørkegrønn);
+    background: #e8f5e4;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 24px;
+  }
+
+  .hero-tekst h1 {
+    font-family: Georgia, serif;
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 20px;
+  }
+  .hero-tekst h1 span {
+    color: var(--mørkegrønn);
+    font-style: italic;
+  }
+
+  .hero-tekst p {
+    font-size: 1.05rem;
+    color: #4b5563;
+    margin-bottom: 28px;
+    max-width: 520px;
+  }
+
+  .hero-knapper {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .knapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 26px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+    border: 1px solid transparent;
+  }
+  .knapp-primær {
+    background: var(--mørkegrønn);
+    color: #fff;
+  }
+  .knapp-primær:hover {
+    background: #164a22;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(30, 95, 46, 0.25);
+  }
+  .knapp-sekundær {
+    background: transparent;
+    color: var(--mørkegrønn);
+    border-color: var(--border);
+  }
+  .knapp-sekundær:hover {
+    border-color: var(--lysegrønn);
+    color: var(--lysegrønn);
+    transform: translateY(-2px);
+  }
+
+  /* ---------- Hero-bilde med flyvende bøker ---------- */
+  .hero-bilde {
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.25);
+    background: var(--mørk-bg);
+    aspect-ratio: 4 / 3;
+  }
+
+  .hero-bilde img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .hero-bilde::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      180deg,
+      rgba(15, 23, 32, 0) 0%,
+      rgba(15, 23, 32, 0) 55%,
+      rgba(15, 23, 32, 0.7) 100%
+    );
+    pointer-events: none;
+  }
+
+  .hero-bilde .sitat {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    bottom: 20px;
+    z-index: 2;
+    color: #ffffff;
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+    line-height: 1.4;
+  }
+  .hero-bilde .sitat small {
+    display: block;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif;
+    font-style: normal;
+    font-size: 0.75rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    margin-top: 6px;
+    color: var(--lysegrønn);
+  }
+
+  /* ---------- Kort-grid ---------- */
+  .utforsk {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 72px 24px 88px;
+  }
+
+  .utforsk-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .utforsk-header h2 {
+    font-family: Georgia, serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+  }
+  .utforsk-header p { color: var(--muted); font-size: 1.02rem; }
+
+  .kort-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+
+  .kort {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px 24px;
+    text-decoration: none;
+    color: var(--tekst);
+    transition: transform 0.2s, box-shadow 0.25s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kort::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--kort-farge, var(--lysegrønn));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .kort:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    border-color: var(--kort-farge, var(--lysegrønn));
+  }
+  .kort:hover::before { opacity: 1; }
+
+  .kort .ikon {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+  }
+  .kort h3 {
+    font-family: Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.25;
+  }
+  .kort p {
+    color: var(--muted);
+    font-size: 0.9rem;
+    line-height: 1.55;
+  }
+  .kort .pil {
+    margin-top: auto;
+    padding-top: 14px;
+    color: var(--kort-farge, var(--mørkegrønn));
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s;
+  }
+  .kort:hover .pil { gap: 12px; }
+
+  /* Kort-farger */
+  .kort.ent3r      { --kort-farge: #1F4E79; }
+  .kort.ingenior   { --kort-farge: #006400; }
+  .kort.realfag    { --kort-farge: #8B0000; }
+  .kort.laerer     { --kort-farge: #4B0082; }
+  .kort.handout10  { --kort-farge: #B8860B; }
+  .kort.handoutvgs { --kort-farge: #008080; }
+  .kort.cv         { --kort-farge: #800020; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 24px;
+    text-align: center;
+  }
+  footer p { color: var(--muted); font-size: 0.85rem; }
+  footer a {
+    color: var(--mørkegrønn);
+    text-decoration: none;
+    font-weight: 500;
+  }
+  footer a:hover { text-decoration: underline; }
+
+  /* ---------- Mobil ---------- */
+  @media (max-width: 900px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 40px;
+      padding: 48px 24px;
+    }
+    .hero-tekst h1 { font-size: 1.9rem; }
+    .hero-bilde { aspect-ratio: 4 / 3; }
+
+    .kort-grid { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  @media (max-width: 600px) {
+    .nav-lenker { gap: 16px; }
+    .nav-lenker a { font-size: 0.85rem; }
+    .hero-tekst h1 { font-size: 1.65rem; }
+    .kort-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+  <header>
+    <nav class="nav">
+      <a href="../" class="logo">Matteforeleseren</a>
+      <ul class="nav-lenker">
+        <li><a href="../Ommeg/">Om meg</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-tekst">
+      <span class="eyebrow">Ressurser · Notater · Oppgaver</span>
+      <h1>Kunnskap vokser når den <span>deles</span>.</h1>
+      <p>
+        Her finner du notater, oppgaver og ressurser i matematikk – organisert etter
+        kategori og gjort tilgjengelig for elever, studenter og lærere.
+      </p>
+      <div class="hero-knapper">
+        <a href="#utforsk" class="knapp knapp-primær">Utforsk kategorier →</a>
+        <a href="../Ommeg/" class="knapp knapp-sekundær">Om meg</a>
+      </div>
+    </div>
+
+    <div class="hero-bilde">
+      <img
+        src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?w=1200&q=80&auto=format&fit=crop"
+        alt="Bøker som flyr – kunnskap vokser når den deles">
+      <div class="sitat">
+        «En bok er et lys som skinner i mørket.»
+        <small>— Ukjent</small>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kategorier -->
+  <section class="utforsk" id="utforsk">
+    <div class="utforsk-header">
+      <h2>Utforsk kategorier</h2>
+      <p>Velg det som passer deg</p>
+    </div>
+
+    <div class="kort-grid">
+
+      <a href="ENT3R/" class="kort ent3r">
+        <div class="ikon">📘</div>
+        <h3>ENT3R</h3>
+        <p>Matematikkhjelp for elever – veiledningshefter og ressurser for mentorer.</p>
+        <span class="pil">Gå til ENT3R →</span>
+      </a>
+
+      <a href="MFI/" class="kort ingenior">
+        <div class="ikon">📗</div>
+        <h3>Matematikk for ingeniører</h3>
+        <p>Forelesningsnotater og oppgaver tilpasset ingeniørstudiet.</p>
+        <span class="pil">Gå til MFI →</span>
+      </a>
+
+      <a href="MFR/" class="kort realfag">
+        <div class="ikon">📕</div>
+        <h3>Matematikk for realfagsstudenter</h3>
+        <p>Notater og ressurser for deg som studerer realfag.</p>
+        <span class="pil">Gå til MFR →</span>
+      </a>
+
+      <a href="MFL/" class="kort laerer">
+        <div class="ikon">📙</div>
+        <h3>Matematikk for lærerstudenter</h3>
+        <p>Fagdidaktikk og matematikk for deg som skal bli lærer.</p>
+        <span class="pil">Gå til MFL →</span>
+      </a>
+
+      <a href="handout10/" class="kort handout10">
+        <div class="ikon">📄</div>
+        <h3>Handout-prosjekt</h3>
+        <p>Prosjektmateriell for 10. klasse – oppgaver og veiledning.</p>
+        <span class="pil">Gå til Handout 10 →</span>
+      </a>
+
+      <a href="handoutvgs/" class="kort handoutvgs">
+        <div class="ikon">📄</div>
+        <h3>Handout-prosjekt</h3>
+        <p>Prosjektmateriell for videregående skole.</p>
+        <span class="pil">Gå til Handout VGS →</span>
+      </a>
+
+      <a href="CV/" class="kort cv">
+        <div class="ikon">👤</div>
+        <h3>Min CV</h3>
+        <p>Erfaring, bakgrunn og engasjement.</p>
+        <span class="pil">Se CV →</span>
+      </a>
+
+    </div>
+  </section>
+
+  <footer>
+    <p>© Matteforeleseren · <a href="https://github.com/Matteforeleseren/Matteforeleseren">GitHub</a></p>
+  </footer>
+
+</body>
+</html>
