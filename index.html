@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="no">
 <head>
@@ -35,24 +36,18 @@
     position: fixed;
     top: 0;
     left: 0;
-    width: 180px;
-    height: 180px;
+    width: 170px;
+    height: 170px;
     pointer-events: none;
     z-index: 9999;
     transform: translate(-50%, -50%);
-    transition: width 0.3s ease, height 0.3s ease, border-radius 0.3s ease;
     will-change: transform;
-  }
-
-  .klokke.dratt {
-    width: 260px;
-    height: 220px;
-    border-radius: 42% 58% 45% 55% / 55% 45% 58% 42%;
   }
 
   .klokke svg {
     width: 100%;
     height: 100%;
+    overflow: visible;
     filter: drop-shadow(0 6px 18px rgba(30, 95, 46, 0.18));
     transition: filter 0.3s;
   }
@@ -108,7 +103,7 @@
   .hero {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 80px 24px 64px;
+    padding: 72px 24px 56px;
     display: grid;
     grid-template-columns: 1.1fr 0.9fr;
     gap: 64px;
@@ -128,13 +123,14 @@
     margin-bottom: 24px;
   }
 
+  /* ⬇️ MINDRE HOVEDTEKST */
   .hero-tekst h1 {
     font-family: Georgia, serif;
-    font-size: 3.4rem;
+    font-size: 2.4rem;
     font-weight: 700;
-    line-height: 1.1;
+    line-height: 1.15;
     letter-spacing: -0.02em;
-    margin-bottom: 24px;
+    margin-bottom: 20px;
   }
   .hero-tekst h1 span {
     color: var(--mørkegrønn);
@@ -142,9 +138,9 @@
   }
 
   .hero-tekst p {
-    font-size: 1.1rem;
+    font-size: 1.05rem;
     color: #4b5563;
-    margin-bottom: 32px;
+    margin-bottom: 28px;
     max-width: 520px;
   }
 
@@ -187,7 +183,7 @@
 
   .hero-bilde img {
     width: 100%;
-    height: 480px;
+    height: 460px;
     object-fit: cover;
     border-radius: 20px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.12);
@@ -197,7 +193,7 @@
   .om-meg {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 96px 24px;
+    padding: 88px 24px;
     display: grid;
     grid-template-columns: 0.9fr 1.1fr;
     gap: 64px;
@@ -207,7 +203,7 @@
 
   .om-meg-bilde img {
     width: 100%;
-    height: 440px;
+    height: 420px;
     object-fit: cover;
     border-radius: 20px;
     box-shadow: 0 20px 50px rgba(0,0,0,0.1);
@@ -224,21 +220,21 @@
   }
   .om-meg-tekst h2 {
     font-family: Georgia, serif;
-    font-size: 2.2rem;
+    font-size: 1.9rem;
     font-weight: 700;
-    line-height: 1.2;
+    line-height: 1.25;
     letter-spacing: -0.015em;
     margin-bottom: 20px;
   }
   .om-meg-tekst p {
-    font-size: 1.05rem;
+    font-size: 1.02rem;
     color: #4b5563;
     margin-bottom: 16px;
   }
   .om-meg-tekst .signatur {
     font-family: Georgia, serif;
     font-style: italic;
-    font-size: 1.2rem;
+    font-size: 1.15rem;
     color: var(--mørkegrønn);
     margin-top: 24px;
   }
@@ -247,7 +243,7 @@
   .utforsk {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 0 24px 96px;
+    padding: 0 24px 88px;
   }
   .utforsk-header {
     text-align: center;
@@ -255,12 +251,12 @@
   }
   .utforsk-header h2 {
     font-family: Georgia, serif;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: 700;
     letter-spacing: -0.015em;
     margin-bottom: 8px;
   }
-  .utforsk-header p { color: var(--muted); font-size: 1.05rem; }
+  .utforsk-header p { color: var(--muted); font-size: 1.02rem; }
 
   .kort-grid {
     display: grid;
@@ -301,10 +297,10 @@
   .kort .ikon { font-size: 1.8rem; margin-bottom: 8px; }
   .kort h3 {
     font-family: Georgia, serif;
-    font-size: 1.4rem;
+    font-size: 1.35rem;
     font-weight: 700;
   }
-  .kort p { color: var(--muted); font-size: 0.98rem; line-height: 1.6; }
+  .kort p { color: var(--muted); font-size: 0.96rem; line-height: 1.6; }
   .kort .pil {
     margin-top: auto;
     padding-top: 16px;
@@ -342,7 +338,7 @@
       gap: 48px;
       padding: 48px 24px;
     }
-    .hero-tekst h1 { font-size: 2.4rem; }
+    .hero-tekst h1 { font-size: 1.9rem; }
     .hero-bilde img { height: 320px; }
 
     .om-meg {
@@ -351,7 +347,7 @@
       gap: 40px;
     }
     .om-meg-bilde img { height: 300px; }
-    .om-meg-tekst h2 { font-size: 1.7rem; }
+    .om-meg-tekst h2 { font-size: 1.55rem; }
 
     .kort-grid { grid-template-columns: 1fr; }
   }
@@ -359,27 +355,33 @@
   @media (max-width: 600px) {
     .nav-lenker { gap: 16px; }
     .nav-lenker a { font-size: 0.85rem; }
-    .hero-tekst h1 { font-size: 2rem; }
+    .hero-tekst h1 { font-size: 1.65rem; }
     .hero-bilde img { height: 260px; }
   }
 </style>
 </head>
 <body>
 
-  <!-- Klokke som følger musen -->
+  <!-- Klokke som følger musen – nå med dynamisk deformasjon -->
   <div class="klokke" id="klokke">
     <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
-      <!-- Skive -->
       <defs>
         <radialGradient id="skiveGrad" cx="50%" cy="50%">
           <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
           <stop offset="100%" stop-color="#ffffff" stop-opacity="0.65"/>
         </radialGradient>
       </defs>
-      <circle cx="100" cy="100" r="92" fill="url(#skiveGrad)" stroke="#1E5F2E" stroke-width="1.5" stroke-opacity="0.35"/>
+
+      <!-- Selve urskiven – nå med en path som deformeres dynamisk -->
+      <path id="urskive"
+            d="M 100 8 A 92 92 0 1 1 99.9 8 Z"
+            fill="url(#skiveGrad)"
+            stroke="#1E5F2E"
+            stroke-width="1.5"
+            stroke-opacity="0.35"/>
 
       <!-- Klassiske romertall -->
-      <g font-family="Georgia, serif" font-size="12" fill="#1E5F2E" text-anchor="middle" font-weight="600">
+      <g id="tall" font-family="Georgia, serif" font-size="12" fill="#1E5F2E" text-anchor="middle" font-weight="600">
         <text x="100" y="26">XII</text>
         <text x="137" y="35">I</text>
         <text x="165" y="60">II</text>
@@ -396,13 +398,10 @@
 
       <!-- Visere -->
       <g id="visere">
-        <!-- Timeviser -->
         <line id="timeviser" x1="100" y1="100" x2="100" y2="55"
               stroke="#1E5F2E" stroke-width="3.5" stroke-linecap="round"/>
-        <!-- Minuttviser -->
         <line id="minuttviser" x1="100" y1="100" x2="100" y2="38"
               stroke="#1E5F2E" stroke-width="2" stroke-linecap="round" stroke-opacity="0.85"/>
-        <!-- Sekundviser -->
         <line id="sekundviser" x1="100" y1="110" x2="100" y2="28"
               stroke="#6BBF59" stroke-width="1.2" stroke-linecap="round"/>
       </g>
@@ -510,48 +509,111 @@
   </footer>
 
   <script>
-    // ---------- Klokke som følger musen ----------
+    // ---------- Klokke som følger musen – med dynamisk deformasjon ----------
     const klokke = document.getElementById('klokke');
+    const urskive = document.getElementById('urskive');
+    const tallGruppe = document.getElementById('tall');
     const timeviser = document.getElementById('timeviser');
     const minuttviser = document.getElementById('minuttviser');
     const sekundviser = document.getElementById('sekundviser');
 
     let musX = window.innerWidth / 2;
     let musY = window.innerHeight / 2;
+    let forrigeMusX = musX;
+    let forrigeMusY = musY;
     let klokkeX = musX;
     let klokkeY = musY;
     let dratt = false;
 
+    // Vi bruker en rekke punkter rundt sirkelen som vi forskyver
+    // basert på musebevegelsens retning og hastighet
+    const ANTALL_PUNKTER = 48;      // hvor mange punkter rundt kanten
+    const BASIS_RADIUS = 92;
+    let forskyvninger = new Array(ANTALL_PUNKTER).fill(0);
+    let maalforskyvninger = new Array(ANTALL_PUNKTER).fill(0);
+
     // Musebevegelse
     document.addEventListener('mousemove', (e) => {
+      forrigeMusX = musX;
+      forrigeMusY = musY;
       musX = e.clientX;
       musY = e.clientY;
     });
 
-    // Klikk = "dra" (for å vise fleksibel form)
+    // Klikk = "dra"
     document.addEventListener('mousedown', () => {
       dratt = true;
-      klokke.classList.add('dratt');
     });
     document.addEventListener('mouseup', () => {
       dratt = false;
-      klokke.classList.remove('dratt');
     });
 
-    // Touch (mobil)
+    // Touch
     document.addEventListener('touchmove', (e) => {
       if (e.touches[0]) {
+        forrigeMusX = musX;
+        forrigeMusY = musY;
         musX = e.touches[0].clientX;
         musY = e.touches[0].clientY;
       }
     }, { passive: true });
 
-    // Animajson: klokken glir mot musen
+    // Hjelpefunksjon: bygg path fra punkter
+    function byggPath(punkter) {
+      let d = '';
+      punkter.forEach((p, i) => {
+        d += (i === 0 ? 'M' : 'L') + ' ' + p.x.toFixed(2) + ' ' + p.y.toFixed(2) + ' ';
+      });
+      return d + 'Z';
+    }
+
+    // Animajson
     function animer() {
+      // Klokken glir mot musen
       const smootheness = 0.12;
       klokkeX += (musX - klokkeX) * smootheness;
       klokkeY += (musY - klokkeY) * smootheness;
       klokke.style.transform = `translate(${klokkeX}px, ${klokkeY}px) translate(-50%, -50%)`;
+
+      // Beregn musebevegelsens retning og hastighet
+      const dx = musX - forrigeMusX;
+      const dy = musY - forrigeMusY;
+      const hastighet = Math.min(Math.sqrt(dx * dx + dy * dy), 40);
+      const retning = Math.atan2(dy, dx);
+
+      // Oppdater mål-forskyvningene
+      for (let i = 0; i < ANTALL_PUNKTER; i++) {
+        const vinkel = (i / ANTALL_PUNKTER) * Math.PI * 2;
+
+        if (dratt && hastighet > 1) {
+          // Hvor mye dette punktet "peker mot" bevegelsesretningen
+          // cos(vinkel - retning) = 1 når punktet peker samme vei som bevegelsen
+          const samsvar = Math.cos(vinkel - retning);
+          // Deformer: strekk ut i bevegelsesretningen, krymp på motsatt side
+          maalforskyvninger[i] = samsvar * hastighet * 0.9;
+        } else {
+          // Rolig sirkel når ikke dratt
+          maalforskyvninger[i] = 0;
+        }
+
+        // Myk overgang
+        forskyvninger[i] += (maalforskyvninger[i] - forskyvninger[i]) * 0.15;
+      }
+
+      // Bygg punktene rundt klokkens kant
+      const punkter = [];
+      for (let i = 0; i < ANTALL_PUNKTER; i++) {
+        const vinkel = (i / ANTALL_PUNKTER) * Math.PI * 2 - Math.PI / 2; // start på toppen
+        const radius = BASIS_RADIUS + forskyvninger[i];
+        punkter.push({
+          x: 100 + Math.cos(vinkel) * radius,
+          y: 100 + Math.sin(vinkel) * radius
+        });
+      }
+
+      // Oppdater urskiven
+      urskive.setAttribute('d', byggPath(punkter));
+
       requestAnimationFrame(animer);
     }
     animer();
@@ -567,27 +629,12 @@
       const minuttVinkel = (minutter * 6) + (sekunder * 0.1);
       const sekundVinkel = sekunder * 6;
 
-      // Roter viserne rundt sentrum (100, 100)
       timeviser.setAttribute('transform', `rotate(${timeVinkel} 100 100)`);
       minuttviser.setAttribute('transform', `rotate(${minuttVinkel} 100 100)`);
       sekundviser.setAttribute('transform', `rotate(${sekundVinkel} 100 100)`);
     }
     setInterval(oppdaterKlokke, 1000);
     oppdaterKlokke();
-
-    // ---------- Dato i klokken (valgfritt) ----------
-    // Vises i konsollen – kan legges til i SVG-en senere
-    function loggDato() {
-      const naa = new Date();
-      const dato = naa.toLocaleDateString('no-NO', {
-        weekday: 'long',
-        day: 'numeric',
-        month: 'long',
-        year: 'numeric'
-      });
-      console.log('Dato:', dato);
-    }
-    loggDato();
   </script>
 
 </body>
