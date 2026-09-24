@@ -3,149 +3,592 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Matteassistenten</title>
+<title>Matteforeleseren – Matematikk for elever og studenter</title>
 <style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
   :root {
-    --link: #003399;
-    --dark: #1a1a1a;
-    --muted: #555;
-    --border: #ddd;
-    --bg-light: #f7f9fc;
-
-    --c-ent3r:       #1F4E79;
-    --c-ingenior:    #006400;
-    --c-realfag:     #8B0000;
-    --c-laerer:      #4B0082;
-    --c-handout10:   #B8860B;
-    --c-handoutvgs:  #008080;
-    --c-cv:          #800020;
+    --lysegrønn: #6BBF59;
+    --mørkegrønn: #1E5F2E;
+    --tekst: #1a1a1a;
+    --muted: #6b7280;
+    --bg: #fafaf7;
+    --border: #e8e8e3;
   }
-  * { box-sizing: border-box; }
+
+  html, body {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+  }
+
   body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-    color: var(--dark);
-    max-width: 900px;
-    margin: 0 auto;
-    padding: 2rem 1.5rem 4rem;
-    background: #fff;
+    font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--tekst);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    cursor: none;
   }
+
+  /* ---------- Klokke som følger musen ---------- */
+  .klokke {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 180px;
+    height: 180px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease, border-radius 0.3s ease;
+    will-change: transform;
+  }
+
+  .klokke.dratt {
+    width: 260px;
+    height: 220px;
+    border-radius: 42% 58% 45% 55% / 55% 45% 58% 42%;
+  }
+
+  .klokke svg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 6px 18px rgba(30, 95, 46, 0.18));
+    transition: filter 0.3s;
+  }
+
+  /* ---------- Meny ---------- */
   header {
-    border-bottom: 2px solid var(--border);
-    padding-bottom: 1.5rem;
-    margin-bottom: 2.5rem;
-    text-align: center;
-  }
-  h1 { font-size: 1.9rem; margin: 0 0 0.4rem; }
-  .subtitle { color: var(--muted); font-size: 1rem; margin: 0; }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 1.2rem;
-    margin-top: 1rem;
+    position: sticky;
+    top: 0;
+    background: rgba(250, 250, 247, 0.85);
+    backdrop-filter: saturate(180%) blur(12px);
+    -webkit-backdrop-filter: saturate(180%) blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 100;
   }
 
-  .knapp {
-    display: block;
-    padding: 1.4rem 1.5rem;
-    border-radius: 8px;
-    text-decoration: none;
-    color: #fff;
-    transition: transform 0.12s ease, box-shadow 0.12s ease;
-    border-left: 6px solid rgba(0,0,0,0.25);
-    box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+  .nav {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
   }
-  .knapp:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 6px 14px rgba(0,0,0,0.15);
-  }
-  .knapp .tittel {
+
+  .logo {
+    font-family: Georgia, serif;
     font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--mørkegrønn);
+    letter-spacing: -0.01em;
+    text-decoration: none;
+  }
+
+  .nav-lenker {
+    display: flex;
+    gap: 28px;
+    list-style: none;
+  }
+  .nav-lenker a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--tekst);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-lenker a:hover { color: var(--mørkegrønn); }
+  .nav-lenker a.cta {
+    color: var(--mørkegrønn);
     font-weight: 600;
-    display: block;
-    margin-bottom: 0.25rem;
-  }
-  .knapp .undertittel {
-    font-size: 0.85rem;
-    opacity: 0.85;
-    display: block;
   }
 
-  .k-ent3r      { background: var(--c-ent3r); }
-  .k-ingenior   { background: var(--c-ingenior); }
-  .k-realfag    { background: var(--c-realfag); }
-  .k-laerer     { background: var(--c-laerer); }
-  .k-handout10  { background: var(--c-handout10); }
-  .k-handoutvgs { background: var(--c-handoutvgs); }
-  .k-cv         { background: var(--c-cv); }
+  /* ---------- Hero ---------- */
+  .hero {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 80px 24px 64px;
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: 64px;
+    align-items: center;
+  }
 
-  footer {
-    margin-top: 3.5rem;
-    padding-top: 1.5rem;
+  .hero-tekst .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mørkegrønn);
+    background: #e8f5e4;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 24px;
+  }
+
+  .hero-tekst h1 {
+    font-family: Georgia, serif;
+    font-size: 3.4rem;
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .hero-tekst h1 span {
+    color: var(--mørkegrønn);
+    font-style: italic;
+  }
+
+  .hero-tekst p {
+    font-size: 1.1rem;
+    color: #4b5563;
+    margin-bottom: 32px;
+    max-width: 520px;
+  }
+
+  .hero-knapper {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .knapp {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 26px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 0.15s, box-shadow 0.2s, background 0.2s;
+    border: 1px solid transparent;
+  }
+  .knapp-primær {
+    background: var(--mørkegrønn);
+    color: #fff;
+  }
+  .knapp-primær:hover {
+    background: #164a22;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(30, 95, 46, 0.25);
+  }
+  .knapp-sekundær {
+    background: transparent;
+    color: var(--mørkegrønn);
+    border-color: var(--border);
+  }
+  .knapp-sekundær:hover {
+    border-color: var(--lysegrønn);
+    color: var(--lysegrønn);
+    transform: translateY(-2px);
+  }
+
+  .hero-bilde img {
+    width: 100%;
+    height: 480px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.12);
+  }
+
+  /* ---------- Om meg ---------- */
+  .om-meg {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 96px 24px;
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 64px;
+    align-items: center;
     border-top: 1px solid var(--border);
-    font-size: 0.85rem;
-    color: var(--muted);
+  }
+
+  .om-meg-bilde img {
+    width: 100%;
+    height: 440px;
+    object-fit: cover;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.1);
+  }
+
+  .om-meg-tekst .eyebrow {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--mørkegrønn);
+    margin-bottom: 16px;
+  }
+  .om-meg-tekst h2 {
+    font-family: Georgia, serif;
+    font-size: 2.2rem;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+    margin-bottom: 20px;
+  }
+  .om-meg-tekst p {
+    font-size: 1.05rem;
+    color: #4b5563;
+    margin-bottom: 16px;
+  }
+  .om-meg-tekst .signatur {
+    font-family: Georgia, serif;
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--mørkegrønn);
+    margin-top: 24px;
+  }
+
+  /* ---------- Kort ---------- */
+  .utforsk {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+  .utforsk-header {
+    text-align: center;
+    margin-bottom: 48px;
+  }
+  .utforsk-header h2 {
+    font-family: Georgia, serif;
+    font-size: 2rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    margin-bottom: 8px;
+  }
+  .utforsk-header p { color: var(--muted); font-size: 1.05rem; }
+
+  .kort-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  .kort {
+    background: #fff;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 36px 32px;
+    text-decoration: none;
+    color: var(--tekst);
+    transition: transform 0.2s, box-shadow 0.25s, border-color 0.2s;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+  }
+  .kort::before {
+    content: "";
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--lysegrønn), var(--mørkegrønn));
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .kort:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+    border-color: var(--lysegrønn);
+  }
+  .kort:hover::before { opacity: 1; }
+
+  .kort .ikon { font-size: 1.8rem; margin-bottom: 8px; }
+  .kort h3 {
+    font-family: Georgia, serif;
+    font-size: 1.4rem;
+    font-weight: 700;
+  }
+  .kort p { color: var(--muted); font-size: 0.98rem; line-height: 1.6; }
+  .kort .pil {
+    margin-top: auto;
+    padding-top: 16px;
+    color: var(--mørkegrønn);
+    font-weight: 600;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: gap 0.2s;
+  }
+  .kort:hover .pil { gap: 12px; }
+
+  /* ---------- Footer ---------- */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 40px 24px;
     text-align: center;
   }
+  footer p { color: var(--muted); font-size: 0.85rem; }
   footer a {
-    color: var(--link);
+    color: var(--mørkegrønn);
     text-decoration: none;
-    border-bottom: 1px dotted var(--link);
+    font-weight: 500;
+  }
+  footer a:hover { text-decoration: underline; }
+
+  /* ---------- Mobil ---------- */
+  @media (max-width: 900px) {
+    body { cursor: auto; }
+    .klokke { display: none; }
+
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 48px;
+      padding: 48px 24px;
+    }
+    .hero-tekst h1 { font-size: 2.4rem; }
+    .hero-bilde img { height: 320px; }
+
+    .om-meg {
+      grid-template-columns: 1fr;
+      padding: 64px 24px;
+      gap: 40px;
+    }
+    .om-meg-bilde img { height: 300px; }
+    .om-meg-tekst h2 { font-size: 1.7rem; }
+
+    .kort-grid { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .nav-lenker { gap: 16px; }
+    .nav-lenker a { font-size: 0.85rem; }
+    .hero-tekst h1 { font-size: 2rem; }
+    .hero-bilde img { height: 260px; }
   }
 </style>
 </head>
 <body>
 
-<header>
-  <h1>Matteassistenten</h1>
-  <p class="subtitle">Notater, oppgaver og ressurser i matematikk</p>
-</header>
+  <!-- Klokke som følger musen -->
+  <div class="klokke" id="klokke">
+    <svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+      <!-- Skive -->
+      <defs>
+        <radialGradient id="skiveGrad" cx="50%" cy="50%">
+          <stop offset="0%" stop-color="#ffffff" stop-opacity="0.95"/>
+          <stop offset="100%" stop-color="#ffffff" stop-opacity="0.65"/>
+        </radialGradient>
+      </defs>
+      <circle cx="100" cy="100" r="92" fill="url(#skiveGrad)" stroke="#1E5F2E" stroke-width="1.5" stroke-opacity="0.35"/>
 
-<main>
-  <div class="grid">
+      <!-- Klassiske romertall -->
+      <g font-family="Georgia, serif" font-size="12" fill="#1E5F2E" text-anchor="middle" font-weight="600">
+        <text x="100" y="26">XII</text>
+        <text x="137" y="35">I</text>
+        <text x="165" y="60">II</text>
+        <text x="174" y="105">III</text>
+        <text x="165" y="148">IV</text>
+        <text x="137" y="173">V</text>
+        <text x="100" y="182">VI</text>
+        <text x="63" y="173">VII</text>
+        <text x="35" y="148">VIII</text>
+        <text x="26" y="105">IX</text>
+        <text x="35" y="60">X</text>
+        <text x="63" y="35">XI</text>
+      </g>
 
-    <a class="knapp k-ent3r" href="ENT3R.html">
-      <span class="tittel">ENT3R</span>
-      <span class="undertittel">Matematikkhjelp for elever</span>
-    </a>
+      <!-- Visere -->
+      <g id="visere">
+        <!-- Timeviser -->
+        <line id="timeviser" x1="100" y1="100" x2="100" y2="55"
+              stroke="#1E5F2E" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- Minuttviser -->
+        <line id="minuttviser" x1="100" y1="100" x2="100" y2="38"
+              stroke="#1E5F2E" stroke-width="2" stroke-linecap="round" stroke-opacity="0.85"/>
+        <!-- Sekundviser -->
+        <line id="sekundviser" x1="100" y1="110" x2="100" y2="28"
+              stroke="#6BBF59" stroke-width="1.2" stroke-linecap="round"/>
+      </g>
 
-    <a class="knapp k-ingenior" href="MFI.html">
-      <span class="tittel">Matematikk for ingeniører</span>
-      <span class="undertittel">Forelesningsnotater og oppgaver</span>
-    </a>
-
-    <a class="knapp k-realfag" href="MFR.html">
-      <span class="tittel">Matematikk for realfagsstudenter</span>
-      <span class="undertittel">Notater og ressurser</span>
-    </a>
-
-    <a class="knapp k-laerer" href="MFL.html">
-      <span class="tittel">Matematikk for lærerstudenter</span>
-      <span class="undertittel">Fagdidaktikk og matematikk</span>
-    </a>
-
-    <a class="knapp k-handout10" href="handout10.html">
-      <span class="tittel">Handout-prosjekt</span>
-      <span class="undertittel">10. klasse</span>
-    </a>
-
-    <a class="knapp k-handoutvgs" href="handoutvgs.html">
-      <span class="tittel">Handout-prosjekt</span>
-      <span class="undertittel">Videregående skole</span>
-    </a>
-
-    <a class="knapp k-cv" href="cv.html">
-      <span class="tittel">Min CV</span>
-      <span class="undertittel">Erfaring og bakgrunn</span>
-    </a>
-
+      <!-- Senter -->
+      <circle cx="100" cy="100" r="4" fill="#1E5F2E"/>
+      <circle cx="100" cy="100" r="1.8" fill="#6BBF59"/>
+    </svg>
   </div>
-</main>
 
-<footer>
-  <p>© Matteforeleseren · <a href="https://github.com/Matteforeleseren/Matteassistenten">GitHub</a></p>
-</footer>
+  <!-- Meny -->
+  <header>
+    <nav class="nav">
+      <a href="index.html" class="logo">Matteforeleseren</a>
+      <ul class="nav-lenker">
+        <li><a href="Matteassistenten/" class="cta">Matteassistenten</a></li>
+        <li><a href="Ommeg/">Om meg</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-tekst">
+      <span class="eyebrow">Matematikk · Undervisning · Formidling</span>
+      <h1>Å gjøre matematikk <span>forståelig</span> for alle.</h1>
+      <p>
+        Jeg er matematikkforeleser og forfatter, og brenner for å formidle faget på
+        en måte som gjør at flere opplever mestring og glede. Her finner du notater,
+        oppgaver og ressurser jeg har utviklet gjennom mange år.
+      </p>
+      <div class="hero-knapper">
+        <a href="Matteassistenten/" class="knapp knapp-primær">
+          Utforsk Matteassistenten →
+        </a>
+        <a href="Ommeg/" class="knapp knapp-sekundær">
+          Les om meg
+        </a>
+      </div>
+    </div>
+
+    <div class="hero-bilde">
+      <img
+        src="https://images.unsplash.com/photo-1596495578065-6e0763fa1178?w=800&q=80&auto=format&fit=crop"
+        alt="Matematikk på tavle">
+    </div>
+  </section>
+
+  <!-- Om meg -->
+  <section class="om-meg">
+    <div class="om-meg-bilde">
+      <img
+        src="https://images.unsplash.com/photo-1509228468518-180dd4864904?w=800&q=80&auto=format&fit=crop"
+        alt="Matematikk og notater">
+    </div>
+    <div class="om-meg-tekst">
+      <span class="eyebrow">Litt om meg</span>
+      <h2>Jeg brenner for matematikk – og for at flere skal lykkes med det.</h2>
+      <p>
+        Gjennom mange år som foreleser og forfatter har jeg sett hvor stor forskjell
+        det gjør når stoffet presenteres på en klar og tilgjengelig måte. Derfor har
+        jeg samlet alle ressursene mine på ett sted – for elever, studenter og lærere.
+      </p>
+      <p>
+        På denne siden finner du forelesningsnotater, oppgaver, veiledningshefter og
+        prosjektmateriell – organisert etter kategori, slik at du raskt finner det
+        du trenger.
+      </p>
+      <p class="signatur">— Matteforeleseren</p>
+    </div>
+  </section>
+
+  <!-- Utforsk -->
+  <section class="utforsk">
+    <div class="utforsk-header">
+      <h2>Utforsk innholdet</h2>
+      <p>Velg det som passer deg</p>
+    </div>
+
+    <div class="kort-grid">
+      <a href="Matteassistenten/" class="kort">
+        <div class="ikon">📚</div>
+        <h3>Matteassistenten</h3>
+        <p>
+          Portalen med alle kategorier: ENT3R, matematikk for ingeniører, realfag,
+          lærerstudenter, handout-prosjekter og mer.
+        </p>
+        <span class="pil">Gå til portalen →</span>
+      </a>
+
+      <a href="Ommeg/" class="kort">
+        <div class="ikon">👋</div>
+        <h3>Om meg</h3>
+        <p>
+          Bakgrunn, erfaring og engasjement. Les mer om hvem som står bak
+          Matteforeleseren og hvorfor jeg lager disse ressursene.
+        </p>
+        <span class="pil">Les mer →</span>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <p>© Matteforeleseren · <a href="https://github.com/Matteforeleseren/Matteforeleseren">GitHub</a></p>
+  </footer>
+
+  <script>
+    // ---------- Klokke som følger musen ----------
+    const klokke = document.getElementById('klokke');
+    const timeviser = document.getElementById('timeviser');
+    const minuttviser = document.getElementById('minuttviser');
+    const sekundviser = document.getElementById('sekundviser');
+
+    let musX = window.innerWidth / 2;
+    let musY = window.innerHeight / 2;
+    let klokkeX = musX;
+    let klokkeY = musY;
+    let dratt = false;
+
+    // Musebevegelse
+    document.addEventListener('mousemove', (e) => {
+      musX = e.clientX;
+      musY = e.clientY;
+    });
+
+    // Klikk = "dra" (for å vise fleksibel form)
+    document.addEventListener('mousedown', () => {
+      dratt = true;
+      klokke.classList.add('dratt');
+    });
+    document.addEventListener('mouseup', () => {
+      dratt = false;
+      klokke.classList.remove('dratt');
+    });
+
+    // Touch (mobil)
+    document.addEventListener('touchmove', (e) => {
+      if (e.touches[0]) {
+        musX = e.touches[0].clientX;
+        musY = e.touches[0].clientY;
+      }
+    }, { passive: true });
+
+    // Animajson: klokken glir mot musen
+    function animer() {
+      const smootheness = 0.12;
+      klokkeX += (musX - klokkeX) * smootheness;
+      klokkeY += (musY - klokkeY) * smootheness;
+      klokke.style.transform = `translate(${klokkeX}px, ${klokkeY}px) translate(-50%, -50%)`;
+      requestAnimationFrame(animer);
+    }
+    animer();
+
+    // ---------- Klokken tikker ----------
+    function oppdaterKlokke() {
+      const naa = new Date();
+      const timer = naa.getHours() % 12;
+      const minutter = naa.getMinutes();
+      const sekunder = naa.getSeconds();
+
+      const timeVinkel = (timer * 30) + (minutter * 0.5);
+      const minuttVinkel = (minutter * 6) + (sekunder * 0.1);
+      const sekundVinkel = sekunder * 6;
+
+      // Roter viserne rundt sentrum (100, 100)
+      timeviser.setAttribute('transform', `rotate(${timeVinkel} 100 100)`);
+      minuttviser.setAttribute('transform', `rotate(${minuttVinkel} 100 100)`);
+      sekundviser.setAttribute('transform', `rotate(${sekundVinkel} 100 100)`);
+    }
+    setInterval(oppdaterKlokke, 1000);
+    oppdaterKlokke();
+
+    // ---------- Dato i klokken (valgfritt) ----------
+    // Vises i konsollen – kan legges til i SVG-en senere
+    function loggDato() {
+      const naa = new Date();
+      const dato = naa.toLocaleDateString('no-NO', {
+        weekday: 'long',
+        day: 'numeric',
+        month: 'long',
+        year: 'numeric'
+      });
+      console.log('Dato:', dato);
+    }
+    loggDato();
+  </script>
 
 </body>
 </html>
